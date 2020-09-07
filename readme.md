@@ -1,7 +1,7 @@
 # Личный проект «Типотека» [![Build status][travis-image]][travis-url]
 
 * Студент: [Кирилл Костиков](https://up.htmlacademy.ru/nodejs/3/user/82178).
-* Наставник: `Неизвестно`.
+* Наставник: [Михаил Семиколенов](https://up.htmlacademy.ru/nodejs/3/user/19706).
 
 ---
 
