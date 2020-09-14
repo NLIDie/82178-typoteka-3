@@ -1,0 +1,30 @@
+{
+  "name": "82178-typoteka-3",
+  "version": "1.0.0",
+  "description": "Типотека",
+  "main": "./build/src/service/service.js",
+  "scripts": {
+    "test": "npm run eslint",
+    "start": "npm run build && node .",
+    "build": "rm -rf ./build && tsc -p .",
+    "eslint": "eslint --ext .ts src/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NLIDie/82178-typoteka-3.git"
+  },
+  "author": "Kirill Kostikov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NLIDie/82178-typoteka-3/issues"
+  },
+  "homepage": "https://github.com/NLIDie/82178-typoteka-3#readme",
+  "devDependencies": {
+    "@types/node": "12.12.6",
+    "@typescript-eslint/eslint-plugin": "4.1.0",
+    "@typescript-eslint/parser": "4.1.0",
+    "eslint": "7.9.0",
+    "eslint-config-htmlacademy": "0.6.0",
+    "typescript": "4.0.2"
+  }
+}
