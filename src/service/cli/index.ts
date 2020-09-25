@@ -12,8 +12,10 @@ export const processCLICommands = async (userArgs: string[]): Promise<void> => {
     }
 
     case cliCommandGenerate.name: {
-      await cliCommandGenerate.run(parseInt(commandValue, 10));
+      const count = parseInt(commandValue, 10);
+      const isValid = Boolean(count);
 
+      cliCommandGenerate.run(isValid ? count : undefined);
       break;
     }
 
