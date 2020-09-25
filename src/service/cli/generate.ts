@@ -1,38 +1,31 @@
 import {promises as fs} from 'fs';
-import {
-  v1 as uuidv1,
-  v5 as uuidv5
-} from 'uuid';
-import lodash from 'lodash';
 import moment from 'moment';
-
+import {
+  shuffle,
+  getRandom, print
+} from '@utils';
+import {
+  makePublication,
+  Publication
+} from '@entities/publication';
 import {ExitCode} from '../constants';
-
-enum PublicationCategory {
-  WOODS = `Деревья`,
-  FOR_LIVE = `За жизнь`,
-  NO_FRAME = `Без рамки`,
-  OTHER = `Разное`,
-  IT = `IT`,
-  MUSIC = `Музыка`,
-  MOVIE = `Кино`,
-  PROGRAMMING = `Программирование`,
-  HARDWARE = `Железо`
-}
 
 enum GenerateCountRestrict {
   MIN = 1,
   MAX = 1000
 }
 
-type Publication = {
-  id: string;
-  title: string;
-  createdDate: string;
-  announce: string;
-  fullText: string;
-  category: PublicationCategory[];
-}
+const CATEGORIES = [
+  `Деревья`,
+  `За жизнь`,
+  `Без рамки`,
+  `Разное`,
+  `IT`,
+  `Музыка`,
+  `Кино`,
+  `Программирование`,
+  `Железо`
+];
 
 const TITLES = [
   `Ёлки. История деревьев`,
@@ -72,12 +65,26 @@ const SENTENCES = [
   `Альбом стал настоящим открытием года. Мощные гитарные рифы и скоростные соло-партии не дадут заскучать.`
 ];
 
-const makePublication = (publicationData: Omit<Publication, 'id'>): Publication => ({
-  id: uuidv5(`Publication`, uuidv1()),
-  ...publicationData
-});
+const getTitle = (titles: string[]): string => (
+  shuffle(titles)[getRandom(0, titles.length - 1)]
+);
 
-const getTitle = (): string => lodash.shuffle(TITLES)[lodash.random(0, TITLES.length - 1)];
+const getAnnounce = (sentences: string[]): string => (
+  sentences
+    .slice(0, 5)
+    .join(` `)
+);
+
+const getFullText = (sentences: string[]): string => (
+  sentences
+    .slice(0, getRandom(6, sentences.length - 1))
+    .join(` `)
+);
+
+const getCategory = (categories: string[]): string[] => (
+  shuffle(categories)
+    .slice(0, getRandom(1, categories.length - 1))
+);
 
 const getCreateDate = (): string => {
   const currentDate = moment();
@@ -85,45 +92,36 @@ const getCreateDate = (): string => {
   const rangeDateMax = currentDate.valueOf();
   const rangeDateMin = currentDate.subtract(3, `month`).valueOf();
 
-  const randomDate = lodash.random(rangeDateMin, rangeDateMax);
+  const randomDate = getRandom(rangeDateMin, rangeDateMax);
 
   return moment(randomDate).format(`YYYY-MM-DD HH:mm:ss`);
 };
 
-const getAnnounce = (): string => (
-  lodash
-    .shuffle(SENTENCES)
-    .slice(0, 5)
-    .join(` `)
-);
+const generatePublication = (
+    titles: string[],
+    categories: string[],
+    sentences: string[],
+): Publication => {
+  const shuffledSentences = shuffle(sentences);
 
-const getFullText = (): string => (
-  lodash
-    .shuffle(SENTENCES)
-    .slice(0, SENTENCES.length - 1)
-    .join(` `)
-);
-
-const getCategory = (): PublicationCategory[] => {
-  const categories = Object.values(PublicationCategory);
-
-  return lodash
-    .shuffle(categories)
-    .slice(0, lodash.random(1, categories.length - 1));
+  return makePublication({
+    title: getTitle(titles),
+    createdDate: getCreateDate(),
+    announce: getAnnounce(shuffledSentences),
+    fullText: getFullText(shuffledSentences),
+    category: getCategory(categories)
+  });
 };
 
-const generatePublication = (): Publication => makePublication({
-  title: getTitle(),
-  createdDate: getCreateDate(),
-  announce: getAnnounce(),
-  fullText: getFullText(),
-  category: getCategory()
-});
-
-const generatePublications = (count: number): Publication[] => (
+const generatePublications = (
+    count: number,
+    titles: string[],
+    categories: string[],
+    sentences: string[]
+): Publication[] => (
   Array(count)
     .fill(null)
-    .map<Publication>(generatePublication)
+    .map<Publication>(() => generatePublication(titles, categories, sentences))
 );
 
 const writeFileWithMocks = async <T>(data: T[]): Promise<void> => {
@@ -131,25 +129,27 @@ const writeFileWithMocks = async <T>(data: T[]): Promise<void> => {
 
   try {
     await fs.writeFile(fileName, JSON.stringify(data, undefined, 2), `utf-8`);
+    print.success(`Файл ${fileName} успешно создан.`);
   } catch (error) {
-    console.error(error);
+    print.error(error);
     process.exit(ExitCode.ERROR);
   }
-
-  console.info(`Файл ${fileName} успешно создан.`);
 };
 
 export const cliCommandGenerate = {
   name: `--generate`,
-  async run(count: number): Promise<void> {
-    const publicationCount = Number.isInteger(count) ? count : GenerateCountRestrict.MIN;
-
-    if (publicationCount > GenerateCountRestrict.MAX) {
-      console.info(`Не больше ${GenerateCountRestrict.MAX} объявлений`);
+  async run(count: number = GenerateCountRestrict.MIN): Promise<void> {
+    if (count > GenerateCountRestrict.MAX) {
+      print.error(`Не больше ${GenerateCountRestrict.MAX} объявлений`);
       return;
     }
 
-    const publications = generatePublications(publicationCount);
+    const publications = generatePublications(
+        count,
+        TITLES,
+        CATEGORIES,
+        SENTENCES
+    );
 
     await writeFileWithMocks(publications);
   }
