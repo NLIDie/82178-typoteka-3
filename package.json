@@ -4,7 +4,7 @@
   "description": "Типотека",
   "main": "./build/service/service.js",
   "scripts": {
-    "start": "node .",
+    "start": "npm run build && node .",
     "build": "babel src -d build --extensions '.ts' --copy-files --source-maps inline",
     "test": "npm run lint",
     "lint": "npm run type-check && npm run eslint",
