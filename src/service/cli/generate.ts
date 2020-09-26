@@ -1,4 +1,5 @@
 import {promises as fs} from 'fs';
+import path from 'path';
 import moment from 'moment';
 import {
   shuffle,
@@ -10,9 +11,9 @@ import {
 } from '@entities/publication';
 import {ExitCode} from '../constants';
 
-const FILE_SENTENCES_PATH = `./data/sentences.txt`;
-const FILE_TITLES_PATH = `./data/titles.txt`;
-const FILE_CATEGORIES_PATH = `./data/categories.txt`;
+const FILE_SENTENCES_PATH = path.join(__dirname, `../../../data/sentences.txt`);
+const FILE_TITLES_PATH = path.join(__dirname, `../../../data/titles.txt`);
+const FILE_CATEGORIES_PATH = path.join(__dirname, `../../../data/categories.txt`);
 
 const getTitle = (titles: string[]): string => (
   shuffle(titles)[getRandom(0, titles.length - 1)]
