@@ -103,10 +103,17 @@ enum GenerateCountRestrict {
   MAX = 1000
 }
 
-export const cliCommandGenerate = {
-  name: `--generate`,
-  async run(count: number = GenerateCountRestrict.MIN): Promise<void> {
-    if (count > GenerateCountRestrict.MAX) {
+export const commandGenerate = {
+  name: `--generate` as const,
+  async run(...args: string[]): Promise<void> {
+    const count = Number.parseInt(args[0], 10);
+    const isValid = !Number.isNaN(count);
+
+    const publicationCount = isValid
+      ? count
+      : GenerateCountRestrict.MAX;
+
+    if (publicationCount > GenerateCountRestrict.MAX) {
       print.error(`Не больше ${GenerateCountRestrict.MAX} объявлений`);
       return;
     }

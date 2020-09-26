@@ -4,8 +4,9 @@
   "description": "Типотека",
   "main": "./build/service/service.js",
   "scripts": {
-    "start": "nodemon ./src/service/service.ts --exec babel-node --extensions '.ts'",
+    "start": "npm run build && node .",
     "build": "babel src -d build --extensions '.ts' --copy-files --source-maps inline",
+    "server": "nodemon ./src/service/service.ts --exec babel-node --extensions '.ts'",
     "test": "npm run lint",
     "lint": "npm run type-check && npm run eslint",
     "eslint": "eslint --ext .ts src/",
