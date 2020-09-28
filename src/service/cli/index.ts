@@ -24,9 +24,9 @@ const CLICommands: Record<CommandName, CLICommand> = {
 const DEFAULT_COMMAND = commandHelp;
 
 export const processCLICommands = async (userArgs: string[]): Promise<void> => {
-  const [commandName, commandValue] = userArgs;
+  const [commandName, ...commandValue] = userArgs;
 
   const command = CLICommands[commandName as CommandName] ?? DEFAULT_COMMAND;
 
-  command.run(commandValue);
+  command.run(...commandValue);
 };

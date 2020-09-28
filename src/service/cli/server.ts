@@ -1,13 +1,9 @@
 import http from 'http';
-import path from 'path';
-import {promises as fs} from 'fs';
-
 import {print} from '@utils';
-import {Publication} from '@entities/publication';
+import {publicationMock} from '@entities/publication';
 
 const DEFAULT_PORT = 3000;
 const DEFAULT_HOST = `localhost`;
-const PATH_TO_MOCKS = path.join(__dirname, `../../../mocks.json`);
 
 enum HttpCode {
   OK = 200,
@@ -48,20 +44,18 @@ const onClientConnect: http.RequestListener = async (
 
   switch (request.url) {
     case `/`: {
-      let mockContent = `[]`;
-
       try {
-        mockContent = await fs.readFile(PATH_TO_MOCKS, `utf-8`);
+        const publications = await publicationMock.read();
+
+        const message = publications
+          .map((publication) => `<li>${publication.title}</li>`)
+          .join(``);
+
+        sendResponse(response, HttpCode.OK, `<ul>${message}</ul>`);
       } catch (err) {
+        print.error(`Не удалось вернуть публикации. ${err}`);
         sendResponse(response, HttpCode.NOT_FOUND, notFoundMessageText);
       }
-
-      const publications: Publication[] = JSON.parse(mockContent);
-      const message = publications
-        .map((publication) => `<li>${publication.title}</li>`)
-        .join(``);
-
-      sendResponse(response, HttpCode.OK, `<ul>${message}</ul>`);
       break;
     }
 
@@ -73,12 +67,9 @@ const onClientConnect: http.RequestListener = async (
 
 export const commandServer = {
   name: `--server` as const,
-  async run(...args: string[]): Promise<void> {
-    const port = Number.parseInt(args[0], 10);
-    const isValid = !Number.isNaN(port);
-
-    const serverPort = isValid
-      ? port
+  async run(port: string): Promise<void> {
+    const serverPort = Number.parseInt(port, 10)
+      ? Number.parseInt(port, 10)
       : DEFAULT_PORT;
 
     http.createServer(onClientConnect)
