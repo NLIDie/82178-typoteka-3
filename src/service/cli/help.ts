@@ -10,11 +10,12 @@ const MESSAGE = `
     --version:            выводит номер версии
     --help:               печатает этот текст
     --generate <count>    формирует файл mocks.json
+    --server <port>       запускает сервер
 `;
 
-export const cliCommandHelp = {
-  name: `--help`,
-  run(): void {
+export const commandHelp = {
+  name: `--help` as const,
+  async run(): Promise<void> {
     print.log(MESSAGE);
   }
 };

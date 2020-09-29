@@ -13,3 +13,7 @@ export const makePublication = (publicationData: Omit<Publication, 'id'>): Publi
   id: getUniqueID(`Publication`),
   ...publicationData
 });
+
+export const publication = {
+  make: makePublication
+};
