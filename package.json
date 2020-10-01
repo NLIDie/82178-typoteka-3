@@ -4,9 +4,13 @@
   "description": "Типотека",
   "main": "./build/service/service.js",
   "scripts": {
-    "start": "npm run build && node .",
+    "start": "npm run build && npm-run-all -p -r server:api server:front",
+    "start:dev": "npm-run-all -p -r server:api-dev server:front-dev",
+    "server:api": "node ./build/service/service.js --server",
+    "server:api-dev": "nodemon ./src/service/service.ts --exec babel-node --extensions '.ts' -- --server",
+    "server:front": "node ./build/express/index.js",
+    "server:front-dev": "nodemon ./src/express/index.ts --exec babel-node --extensions '.ts'",
     "build": "babel src -d build --extensions '.ts' --copy-files --source-maps inline",
-    "server": "nodemon ./src/service/service.ts --exec babel-node --extensions '.ts'",
     "test": "npm run lint",
     "lint": "npm run type-check && npm run eslint",
     "eslint": "eslint --ext .ts src/",
@@ -29,6 +33,7 @@
     "@babel/node": "7.10.5",
     "@babel/preset-env": "7.11.5",
     "@babel/preset-typescript": "7.10.4",
+    "@types/express": "4.17.8",
     "@types/lodash": "4.14.161",
     "@types/node": "12.12.6",
     "@types/uuid": "8.3.0",
@@ -38,10 +43,12 @@
     "eslint": "7.9.0",
     "eslint-config-htmlacademy": "0.6.0",
     "nodemon": "2.0.4",
+    "npm-run-all": "4.1.5",
     "typescript": "4.0.2"
   },
   "dependencies": {
     "chalk": "4.1.0",
+    "express": "4.17.1",
     "lodash": "4.17.20",
     "moment": "2.28.0",
     "uuid": "8.3.0"
