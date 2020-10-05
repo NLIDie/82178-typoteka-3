@@ -4,10 +4,10 @@ export const myRouter = router();
 
 /* мои публикации; */
 myRouter.get(`/`, (req, res) => {
-  res.send(`/my`);
+  res.render(`pages/my`);
 });
 
 /* комментарии к публикациям; */
 myRouter.get(`/comments`, (req, res) => {
-  res.send(`/my/comments`);
+  res.render(`pages/comments`);
 });
