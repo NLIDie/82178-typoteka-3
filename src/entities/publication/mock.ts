@@ -4,7 +4,7 @@ import {promises as fs} from 'fs';
 import {print} from '@utils';
 import {Publication} from './publication';
 
-const MOCK_FILE_NAME = path.join(__dirname, `../../mocks.json`);
+const MOCK_FILE_NAME = path.join(__dirname, `../../../mocks.json`);
 
 const writeMockFile = async (publications: Publication[]): Promise<void> => {
   const content = JSON.stringify(publications, undefined, 2);
