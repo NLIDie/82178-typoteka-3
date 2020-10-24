@@ -1,8 +1,5 @@
-import {
-  v1 as uuidv1,
-  v5 as uuidv5
-} from 'uuid';
+import {nanoid} from 'nanoid';
 
-export const getUniqueID = (name = `UniqueID`): string => {
-  return uuidv5(name, uuidv1());
+export const getUniqueID = (): string => {
+  return nanoid();
 };

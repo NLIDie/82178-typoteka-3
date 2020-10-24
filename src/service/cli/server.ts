@@ -1,5 +1,9 @@
 import {print} from '@utils';
-import {apiServer} from '@service/server';
+import {createAPIServer} from '@service/server';
+import {ArticlesStorage} from '@service/storage/articles-storage';
+import {FileSystemStorage} from '@service/storage/file-system-storage';
+import {MOCK_FILE_PATH} from '@service/constants';
+import {TArticle} from '@service/entities/articles';
 
 const DEFAULT_PORT = 3000;
 const DEFAULT_HOST = `localhost`;
@@ -10,6 +14,12 @@ export const commandServer = {
     const serverPort = Number.parseInt(port, 10)
       ? Number.parseInt(port, 10)
       : DEFAULT_PORT;
+
+    const articlesFileSystemStorage = new FileSystemStorage<TArticle>(MOCK_FILE_PATH);
+    const articles = await articlesFileSystemStorage.load();
+    const articlesStorage = new ArticlesStorage(articles);
+
+    const apiServer = createAPIServer(articlesStorage);
 
     apiServer
       .listen(serverPort, DEFAULT_HOST)

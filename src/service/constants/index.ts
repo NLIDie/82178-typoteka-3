@@ -1,3 +1,5 @@
+import path from 'path';
+
 export enum ExitCode {
   SUCCESS = 0,
   ERROR = 1
@@ -10,3 +12,5 @@ export enum HttpCode {
   FORBIDDEN = 403,
   UNAUTHORIZED = 401,
 }
+
+export const MOCK_FILE_PATH = path.resolve(__dirname, `../../../mocks.json`);
