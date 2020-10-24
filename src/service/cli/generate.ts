@@ -6,7 +6,7 @@ import {
 } from '@utils';
 import {commentGenerator} from '@service/mocks/comments-generator';
 import {articlesGenerator} from '@service/mocks/articles-generator';
-import {FileSystemStorage} from '@service/storage/file-system-storage';
+import {FileSystemStorage} from '@service/services/file-system-storage';
 import {TArticle} from '@service/entities/articles';
 import { MOCK_FILE_PATH } from '@service/constants';
 

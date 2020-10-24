@@ -4,7 +4,7 @@ import {createArticlesRouters} from './routes/articles-routes';
 import {createCategoriesRoutes} from './routes/categories-routes';
 
 import {HttpCode} from '@service/constants';
-import {ArticlesStorage} from '@service/storage/articles-storage';
+import {ArticlesStorage} from '@service/services/articles-storage';
 
 export const createAPIServer = (
     articlesStorage: ArticlesStorage,

@@ -4,7 +4,7 @@ import {
 } from 'express';
 
 interface IStorage<Entity = unknown> {
-  add: () => Promise<Entity[]>;
+  add: (entity) => Promise<Entity[]>;
   get: () => Promise<Entity[]>;
   update: (callback: (entity: Entity) => Entity) => Promise<Entity[]>;
   delete: (callback: (entity: Entity) => boolean) => Promise<Entity[]>;

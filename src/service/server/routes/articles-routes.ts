@@ -2,7 +2,7 @@ import {
   Router as router,
   IRouter
 } from 'express';
-import {ArticlesStorage} from '@service/storage/articles-storage';
+import {ArticlesStorage} from '@service/services/articles-storage';
 
 // 10.2. Форма добавления новой публикации:
 // Заголовок;

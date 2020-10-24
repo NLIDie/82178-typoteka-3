@@ -1,7 +1,7 @@
 import {print} from '@utils';
 import {createAPIServer} from '@service/server';
-import {ArticlesStorage} from '@service/storage/articles-storage';
-import {FileSystemStorage} from '@service/storage/file-system-storage';
+import {ArticlesStorage} from '@service/services/articles-storage';
+import {FileSystemStorage} from '@service/services/file-system-storage';
 import {MOCK_FILE_PATH} from '@service/constants';
 import {TArticle} from '@service/entities/articles';
 
